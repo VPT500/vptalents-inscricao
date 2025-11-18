@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscrição - VPTalents</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#d4af37',
+                            dark: '#1e293b',
+                            blue: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Inter"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f3f4f6;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        /* Custom Radio Button Style */
+        .radio-card:has(input:checked) {
+            border-color: #d4af37;
+            background-color: #fffbeb;
+        }
+        .radio-card:has(input:checked) .check-icon {
+            display: block;
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col items-center py-8 px-4">
+
+    <!-- Main Container -->
+    <div class="w-full max-w-lg glass-panel shadow-xl rounded-2xl overflow-hidden border border-white">
+        
+        <!-- Header / Hero -->
+        <div class="bg-slate-900 text-white p-6 text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-brand-gold"></div>
+            <div class="relative z-10">
+                <h1 class="font-serif text-3xl tracking-wide text-brand-gold mb-1">VPTalents</h1>
+                <p class="text-slate-400 text-sm uppercase tracking-widest font-semibold">Jantar de Gala</p>
+            </div>
+            <!-- Decorative circles -->
+            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-brand-gold opacity-10 rounded-full"></div>
+            <div class="absolute top-5 -left-5 w-20 h-20 bg-blue-500 opacity-10 rounded-full"></div>
+        </div>
+
+        <!-- Navigation Tabs (Public vs Admin - Hidden in UI, accessible via footer) -->
+        <div id="view-registration" class="block">
+            
+            <!-- Info Banner -->
+            <div class="bg-slate-100 p-4 grid grid-cols-2 divide-x divide-slate-300 border-b border-slate-200">
+                <div class="text-center px-2">
+                    <p class="text-xs text-slate-500 uppercase font-bold">Data</p>
+                    <p class="font-bold text-slate-800">19/12, 19h30</p>
+                </div>
+                <div class="text-center px-2">
+                    <p class="text-xs text-slate-500 uppercase font-bold">Valor Atual</p>
+                    <p class="font-bold text-brand-gold" id="displayPrice">R$ 30,00</p>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form onsubmit="handleFormSubmit(event)" class="p-6 space-y-5">
+                
+                <!-- Nome -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Nome Completo</label>
+                    <input type="text" id="name" required 
+                        class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition"
+                        placeholder="Seu nome">
+                </div>
+
+                <!-- Modalidade (Dormir ou Não) -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Tipo de Inscrição</label>
+                    <div class="grid grid-cols-1 gap-3">
+                        
+                        <!-- Opção 1: Só Jantar -->
+                        <label class="radio-card relative border border-slate-300 rounded-lg p-4 cursor-pointer bg-white hover:bg-slate-50 transition flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <div class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center bg-white radio-circle">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-brand-gold hidden check-icon"></div>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800">Apenas Jantar</p>
+                                    <p class="text-xs text-slate-500">Não dormirá na igreja</p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-slate-600">R$ 30,00</span>
+                            <input type="radio" name="modality" value="dinner" class="hidden" checked onchange="updatePrice(30)">
+                        </label>
+
+                        <!-- Opção 2: Completo -->
+                        <label class="radio-card relative border border-slate-300 rounded-lg p-4 cursor-pointer bg-white hover:bg-slate-50 transition flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <div class="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center bg-white radio-circle">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-brand-gold hidden check-icon"></div>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-slate-800">Completo</p>
+                                    <p class="text-xs text-slate-500">Jantar + Dormir + Café</p>
+                                </div>
+                            </div>
+                            <span class="font-bold text-brand-gold">R$ 40,00</span>
+                            <input type="radio" name="modality" value="full" class="hidden" onchange="updatePrice(40)">
+                        </label>
+
+                    </div>
+                </div>
+
+                <!-- Grid Idade e Tribo -->
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Idade -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Idade</label>
+                        <select id="age" required 
+                            class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-brand-gold appearance-none">
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="12">12 anos</option>
+                            <option value="13">13 anos</option>
+                            <option value="14">14 anos</option>
+                            <option value="15">15 anos</option>
+                            <option value="16">16 anos</option>
+                            <option value="17">17 anos</option>
+                            <option value="18">18 anos</option>
+                            <option value="19">19 anos</option>
+                            <option value="20">20 anos</option>
+                        </select>
+                    </div>
+
+                    <!-- Tribo -->
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1">Tribo</label>
+                        <select id="tribe" required 
+                            class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-brand-gold appearance-none">
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="Vermelha 1">Vermelha 1</option>
+                            <option value="Vermelha 2">Vermelha 2</option>
+                            <option value="Azul 1">Azul 1</option>
+                            <option value="Azul 2">Azul 2</option>
+                            <option value="Verde">Verde</option>
+                            <option value="Branca">Branca</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Restrição Alimentar -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">
+                        Restrição Alimentar 
+                        <span class="text-slate-400 font-normal text-xs ml-1">(Opcional)</span>
+                    </label>
+                    <input type="text" id="allergies" 
+                        class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-brand-gold transition placeholder-slate-400"
+                        placeholder="Ex: Glúten, Lactose, Frutos do mar...">
+                </div>
+
+                <!-- Telefone -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">WhatsApp</label>
+                    <input type="tel" id="phone" required maxlength="15" onkeyup="maskPhone(this)"
+                        class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 focus:outline-none focus:border-brand-gold transition"
+                        placeholder="(22) 99999-9999">
+                </div>
+
+                <!-- Divider -->
+                <hr class="border-slate-200">
+
+                <!-- PIX Section -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Pagamento (PIX)</label>
+                    <div class="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Chave E-mail</span>
+                            <i class="fas fa-qrcode text-slate-400"></i>
+                        </div>
+                        <p class="font-mono text-sm bg-white p-2 rounded border border-slate-200 text-center select-all break-all text-slate-600 mb-3" id="pixKey">tesourariapibca1@gmail.com</p>
+                        <button type="button" onclick="copyPix()" id="copyBtn"
+                            class="w-full text-xs bg-slate-800 text-white py-2 rounded hover:bg-slate-700 transition">
+                            Copiar Chave
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Upload Comprovante -->
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Anexar Comprovante</label>
+                    <label class="flex flex-col items-center justify-center w-full h-28 border-2 border-slate-300 border-dashed rounded-lg cursor-pointer bg-slate-50 hover:bg-white hover:border-brand-gold transition relative overflow-hidden group">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6 z-10">
+                            <i class="fas fa-cloud-upload-alt text-2xl text-slate-400 mb-2 group-hover:text-brand-gold transition"></i>
+                            <p class="text-sm text-slate-500 font-medium" id="fileNameDisplay">Clique para selecionar a imagem</p>
+                        </div>
+                        <input id="receiptFile" type="file" class="hidden" accept="image/*" onchange="updateFileName(this)" />
+                    </label>
+                    <p class="text-xs text-slate-400 mt-1 text-center">Você também poderá enviar pelo WhatsApp na próxima tela.</p>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" id="submitBtn"
+                    class="w-full bg-brand-gold hover:bg-yellow-600 text-white font-bold py-4 rounded-lg shadow-md transition transform hover:-translate-y-1">
+                    Realizar Inscrição
+                </button>
+                <div id="loading" class="hidden text-center text-sm text-slate-500 mt-2">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Salvando inscrição...
+                </div>
+            </form>
+        </div>
+
+        <!-- Success View -->
+        <div id="view-success" class="hidden p-8 text-center">
+            <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-800 mb-2">Confirmado!</h2>
+            <p class="text-slate-600 mb-6">Sua pré-inscrição foi realizada. Envie a mensagem para o líder validar.</p>
+            
+            <button onclick="sendToWhatsApp()" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg shadow flex items-center justify-center gap-2">
+                <i class="fab fa-whatsapp text-xl"></i> Validar no WhatsApp
+            </button>
+            <p class="text-xs text-slate-400 mt-2">Ao clicar, anexe o comprovante na conversa.</p>
+
+            <button onclick="resetForm()" class="mt-6 text-sm text-slate-500 underline">
+                Nova Inscrição
+            </button>
+        </div>
+
+        <!-- Admin Login View -->
+        <div id="view-admin-login" class="hidden p-8">
+            <h2 class="text-xl font-bold text-slate-800 mb-4 text-center">Acesso Liderança</h2>
+            <p class="text-sm text-center text-slate-500 mb-4">Seus dados estão agora salvos na nuvem (Firebase).</p>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <input type="password" id="adminPass" placeholder="Senha (vptalents2024)" class="w-full border p-3 rounded-lg">
+                <button type="submit" class="w-full bg-slate-800 text-white py-3 rounded-lg">Entrar</button>
+                <button type="button" onclick="showView('view-registration')" class="w-full text-slate-500 text-sm mt-2">Voltar</button>
+            </form>
+        </div>
+
+        <!-- Admin Dashboard View -->
+        <div id="view-admin-dash" class="hidden flex flex-col h-full w-full">
+            <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
+                <div>
+                    <h2 class="font-bold text-slate-800">Inscrições (<span id="totalCount">0</span>)</h2>
+                    <p class="text-xs text-slate-500">Gerenciamento Financeiro (UID: <span id="adminUserId"></span>)</p>
+                </div>
+                <button onclick="logoutAdmin()" class="text-xs text-red-500 hover:text-red-700 transition">Sair</button>
+            </div>
+            <div class="p-0 overflow-y-auto max-h-96 w-full overflow-x-auto">
+                <table class="w-full text-left text-sm min-w-[500px]">
+                    <thead class="bg-slate-100 text-slate-500">
+                        <tr>
+                            <th class="p-3 font-semibold">Inscrito</th>
+                            <th class="p-3 font-semibold">Tipo</th>
+                            <th class="p-3 font-semibold text-center">Pago?</th>
+                            <th class="p-3 font-semibold text-right">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registrationsList" class="divide-y divide-slate-100">
+                        <!-- JS populates this -->
+                    </tbody>
+                </table>
+                <div id="emptyState" class="p-8 text-center text-slate-400 hidden">
+                    Nenhuma inscrição ainda.
+                </div>
+            </div>
+            <div class="p-4 bg-slate-50 border-t text-center grid grid-cols-2 gap-2">
+                <div class="text-left">
+                     <p class="text-xs text-slate-500">Total Recebido:</p>
+                     <p class="font-bold text-green-600 text-lg" id="totalRevenue">R$ 0,00</p>
+                </div>
+                <div class="text-right">
+                     <button onclick="clearAllData()" class="text-xs text-red-400 underline mt-2">Limpar Todos os Dados</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer Link for Admin -->
+    <div class="mt-6 text-center">
+        <button onclick="showView('view-admin-login')" class="text-xs text-slate-400 hover:text-slate-600 flex items-center gap-1 mx-auto">
+            <i class="fas fa-lock"></i> Área da Liderança
+        </button>
+    </div>
+
+    <script type="module">
+        // Importa as funções necessárias do Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, query, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        setLogLevel('Debug'); // Habilita logs para depuração
+
+        // Variáveis Globais de Configuração do Canvas (MANDATÓRIO)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'vptalents-inscricao-default';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        // Variáveis de Instância
+        let db;
+        let auth;
+        let userId = null;
+        let isAuthReady = false;
+        
+        // Variável de estado para o preço atual
+        let currentPrice = 30;
+        
+        // Inicialização do Firebase e Autenticação
+        if (firebaseConfig) {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            // Listener de estado de autenticação
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                } else {
+                    // Se não houver token inicial, autentica anonimamente
+                    try {
+                        await signInAnonymously(auth);
+                        userId = auth.currentUser.uid;
+                    } catch (error) {
+                        console.error("Erro na autenticação anônima:", error);
+                    }
+                }
+                isAuthReady = true;
+                // Tenta carregar os dados se já estiver no dashboard
+                if (document.getElementById('view-admin-dash').classList.contains('block')) {
+                    setupAdminDataListener();
+                }
+            });
+
+            // Usar o token personalizado para autenticação inicial (se fornecido)
+            if (initialAuthToken) {
+                try {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } catch (error) {
+                    console.error("Erro ao fazer login com token personalizado:", error);
+                }
+            }
+        } else {
+            console.error("Firebase config not available. App will not function correctly.");
+            isAuthReady = true; // Permite a UI a carregar mesmo sem Firebase
+        }
+
+        // --- Utils de Dados ---
+        function getCollectionPath() {
+             // O caminho é público para que as inscrições feitas pelos usuários sejam salvas para o administrador ver.
+            return `artifacts/${appId}/public/data/registrations`;
+        }
+
+        // --- Views Management ---
+        window.showView = function (viewId) {
+            ['view-registration', 'view-success', 'view-admin-login', 'view-admin-dash'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(viewId).classList.remove('hidden');
+
+            if (viewId === 'view-admin-dash' && isAuthReady) {
+                setupAdminDataListener();
+                document.getElementById('adminUserId').innerText = userId;
+            }
+        }
+
+        // --- File Input Logic ---
+        window.updateFileName = function (input) {
+            const display = document.getElementById('fileNameDisplay');
+            if (input.files && input.files[0]) {
+                display.innerText = input.files[0].name;
+                display.classList.add('text-brand-gold', 'font-bold');
+                display.classList.remove('text-slate-500');
+            } else {
+                display.innerText = "Clique para selecionar a imagem";
+                display.classList.remove('text-brand-gold', 'font-bold');
+                display.classList.add('text-slate-500');
+            }
+        }
+
+        // --- Form Logic ---
+        window.updatePrice = function (val) {
+            currentPrice = val;
+            document.getElementById('displayPrice').innerText = `R$ ${val},00`;
+        }
+
+        window.maskPhone = function (input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            if (value.length > 10) value = value.replace(/^(\d\d)(\d{5})(\d{4}).*/, '($1) $2-$3');
+            else if (value.length > 5) value = value.replace(/^(\d\d)(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+            else if (value.length > 2) value = value.replace(/^(\d\d)(\d{0,5}).*/, '($1) $2');
+            input.value = value;
+        }
+
+        window.copyPix = function () {
+            const pix = document.getElementById('pixKey').innerText;
+            // Usando document.execCommand('copy') por ser mais compatível em iframes
+            const tempInput = document.createElement('textarea');
+            tempInput.value = pix;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const btn = document.getElementById('copyBtn');
+            const original = btn.innerText;
+            btn.innerText = "Copiado!";
+            btn.classList.add("bg-green-600");
+            setTimeout(() => {
+                btn.innerText = original;
+                btn.classList.remove("bg-green-600");
+            }, 2000);
+        }
+
+        window.handleFormSubmit = async function (e) {
+            e.preventDefault();
+            
+            if (!db) {
+                console.error("Database not initialized.");
+                return;
+            }
+
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').classList.add('opacity-50');
+            document.getElementById('loading').classList.remove('hidden');
+            
+            try {
+                // Get selected modality
+                const modalityRadio = document.querySelector('input[name="modality"]:checked');
+                const modalityType = modalityRadio.value === 'full' ? 'Completo' : 'Só Jantar';
+                const modalityPrice = modalityRadio.value === 'full' ? 40 : 30;
+
+                // Gather Data
+                const newRegistration = {
+                    name: document.getElementById('name').value,
+                    age: document.getElementById('age').value,
+                    tribe: document.getElementById('tribe').value,
+                    phone: document.getElementById('phone').value,
+                    allergies: document.getElementById('allergies').value || '',
+                    modality: modalityType,
+                    price: modalityPrice,
+                    paid: false, // Default payment status
+                    createdAt: new Date().toISOString()
+                };
+
+                // Save to Firestore
+                const docRef = doc(collection(db, getCollectionPath()));
+                await setDoc(docRef, newRegistration);
+
+                showView('view-success');
+
+            } catch (error) {
+                console.error("Erro ao salvar a inscrição:", error);
+                // Usar div customizada ao invés de alert()
+                alertPlaceholder('Erro ao salvar: ' + error.message, 'error'); 
+            } finally {
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').classList.remove('opacity-50');
+                document.getElementById('loading').classList.add('hidden');
+            }
+        }
+
+        window.sendToWhatsApp = function () {
+            const name = document.getElementById('name').value;
+            const tribe = document.getElementById('tribe').value;
+            const allergies = document.getElementById('allergies').value;
+            const modalityRadio = document.querySelector('input[name="modality"]:checked');
+            const modalityText = modalityRadio.value === 'full' ? 'Completo (Com Dormir)' : 'Apenas Jantar';
+
+            let text = `Olá! Fiz minha inscrição no VPTalents.\n\n👤 *Nome:* ${name}\n⛺ *Tribo:* ${tribe}\n🎟️ *Tipo:* ${modalityText}`;
+            
+            if (allergies) {
+                text += `\n⚠️ *Restrição:* ${allergies}`;
+            }
+
+            text += `\n\nEstou enviando o comprovante de pagamento agora:`;
+            
+            // Leader's Phone Number (55 + 22 + 997737420)
+            const phoneNumber = "5522997737420";
+            
+            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        window.resetForm = function () {
+            document.querySelector('form').reset();
+            // Reset price display to default
+            updatePrice(30);
+            // Reset file display
+            const display = document.getElementById('fileNameDisplay');
+            display.innerText = "Clique para selecionar a imagem";
+            display.classList.remove('text-brand-gold', 'font-bold');
+            
+            showView('view-registration');
+        }
+        
+        // --- Custom Alert Placeholder (substituindo o alert nativo) ---
+        function alertPlaceholder(message, type = 'info') {
+            // Implementação simples de um aviso na UI
+            console.error("UI Alert:", message);
+            const color = type === 'error' ? 'bg-red-500' : 'bg-blue-500';
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `fixed top-4 right-4 p-4 rounded-lg shadow-xl text-white font-bold ${color} z-50`;
+            alertDiv.innerText = message;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => {
+                document.body.removeChild(alertDiv);
+            }, 5000);
+        }
+
+        // --- Admin Logic ---
+        const ADMIN_PASSWORD = 'vptalents2024';
+
+        window.handleAdminLogin = function (e) {
+            e.preventDefault();
+            const pass = document.getElementById('adminPass').value;
+            if(pass === ADMIN_PASSWORD) {
+                showView('view-admin-dash');
+            } else {
+                alertPlaceholder('Senha incorreta!', 'error');
+            }
+        }
+        
+        window.logoutAdmin = function() {
+            // Simplesmente volta para a tela de registro, sem deslogar o Firebase
+            // (a sessão anônima deve permanecer ativa)
+            showView('view-registration');
+        }
+
+        let unsubscribeSnapshot = null;
+
+        function setupAdminDataListener() {
+            if (!isAuthReady || !db) {
+                console.warn("Aguardando inicialização do Firebase para carregar dados do admin.");
+                return;
+            }
+
+            if (unsubscribeSnapshot) {
+                unsubscribeSnapshot(); // Remove listener antigo se existir
+            }
+            
+            const q = query(collection(db, getCollectionPath()));
+
+            // onSnapshot escuta alterações em tempo real
+            unsubscribeSnapshot = onSnapshot(q, (snapshot) => {
+                const registrations = [];
+                snapshot.forEach(doc => {
+                    registrations.push({ id: doc.id, ...doc.data() });
+                });
+                loadAdminData(registrations);
+            }, (error) => {
+                console.error("Erro ao escutar dados do Firestore:", error);
+                alertPlaceholder("Erro ao carregar dados do banco.", 'error');
+            });
+        }
+
+        function loadAdminData(registrations) {
+            const list = document.getElementById('registrationsList');
+            const countSpan = document.getElementById('totalCount');
+            const emptyState = document.getElementById('emptyState');
+            const revenueSpan = document.getElementById('totalRevenue');
+
+            list.innerHTML = '';
+            countSpan.innerText = registrations.length;
+
+            let totalRev = 0;
+
+            if(registrations.length === 0) {
+                emptyState.classList.remove('hidden');
+                revenueSpan.innerText = "R$ 0,00";
+                return;
+            }
+            emptyState.classList.add('hidden');
+
+            // Sort by most recent first (using createdAt property)
+            registrations.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            
+            registrations.forEach(reg => {
+                // Calculate revenue only for paid users
+                if(reg.paid) totalRev += reg.price;
+
+                // Badge se tiver alergia
+                const allergyBadge = reg.allergies ? 
+                    `<div class="mt-1 text-xs text-red-600 font-semibold flex items-center gap-1"><i class="fas fa-exclamation-triangle"></i> ${reg.allergies}</div>` : '';
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
+                
+                // Status Icon Logic
+                const statusBtnClass = reg.paid ? 'bg-green-100 text-green-600 border-green-200' : 'bg-red-50 text-red-400 border-red-200';
+                const statusIcon = reg.paid ? '<i class="fas fa-check"></i> Pago' : '<i class="fas fa-clock"></i> Pendente';
+
+                tr.innerHTML = `
+                    <td class="p-3 align-top">
+                        <p class="font-bold text-slate-800">${reg.name}</p>
+                        <p class="text-xs text-slate-500">${reg.tribe}</p>
+                        ${allergyBadge}
+                    </td>
+                    <td class="p-3 text-sm text-slate-600 align-top">
+                        <span class="block font-bold text-slate-700">${reg.modality}</span>
+                        <span class="text-xs">R$ ${reg.price},00</span>
+                    </td>
+                    <td class="p-3 align-top text-center">
+                        <button onclick="togglePayment('${reg.id}', ${reg.paid})" 
+                            class="text-xs font-bold px-3 py-1 rounded-full border ${statusBtnClass} hover:opacity-80 transition">
+                            ${statusIcon}
+                        </button>
+                    </td>
+                    <td class="p-3 text-right align-top">
+                        <button onclick="deleteReg('${reg.id}')" class="text-slate-400 hover:text-red-600 p-2">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                list.appendChild(tr);
+            });
+
+            revenueSpan.innerText = `R$ ${totalRev},00`;
+        }
+
+        window.togglePayment = async function (docId, currentStatus) {
+            if (!db) return;
+             // Criar um modal de confirmação customizado
+            if (!confirm(`Tem certeza que deseja mudar o status de pagamento para ${currentStatus ? 'PENDENTE' : 'PAGO'}?`)) return;
+
+            try {
+                const regRef = doc(db, getCollectionPath(), docId);
+                await updateDoc(regRef, {
+                    paid: !currentStatus
+                });
+                // A atualização de dados será feita automaticamente pelo onSnapshot
+            } catch (error) {
+                console.error("Erro ao atualizar pagamento:", error);
+                alertPlaceholder("Não foi possível atualizar o pagamento.", 'error');
+            }
+        }
+
+        window.deleteReg = async function (docId) {
+            if (!db) return;
+            // Criar um modal de confirmação customizado
+            if (!confirm('Remover esta inscrição permanentemente?')) return;
+            
+            try {
+                const regRef = doc(db, getCollectionPath(), docId);
+                await deleteDoc(regRef);
+                // A lista será atualizada automaticamente pelo onSnapshot
+            } catch (error) {
+                console.error("Erro ao deletar inscrição:", error);
+                alertPlaceholder("Não foi possível deletar a inscrição.", 'error');
+            }
+        }
+
+        window.clearAllData = function() {
+            if (!db) return;
+            // Criar um modal de confirmação customizado
+            if (!confirm('ATENÇÃO: Isso apagará TODAS as inscrições do banco de dados permanentemente. Você tem certeza?')) return;
+            
+            // NOTE: Para apagar coleções inteiras, é necessário usar a CLI do Firebase.
+            // Aqui, vamos apenas impedir que isso aconteça para evitar perda acidental de dados.
+            alertPlaceholder("A função de Limpar Todos os Dados foi desativada para evitar perda acidental. Por favor, use a CLI do Firebase se necessário.", 'error');
+        }
+
+        // --- Inicialização ao Carregar a Página ---
+        window.onload = function() {
+            if (isAuthReady && auth.currentUser) {
+                // Checa se já está autenticado e pronto
+                document.getElementById('adminUserId').innerText = auth.currentUser.uid;
+            } else if (isAuthReady) {
+                // Caso contrário, aguarda a autenticação anônima
+            }
+        };
+
+    </script>
+</body>
